@@ -5,12 +5,14 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * @author Century
+ * @author Centurybbx
  * This is a encrypting file system finished on June 3rd, 2021 by Century
  * Needless to say, all the stuffs here are bunches of shit...
  * but it still works well if you input the right arguments hahahaha
@@ -39,17 +41,10 @@ public class FileEncryptSys {
      * @param mountPath mounted path
      * @return legal status
      */
-    private boolean judgeLegality(String filePath, String mountPath) {
-        boolean flag = false;
-        int mountPathLen = mountPath.length();
-        int filePathLen = filePath.length();
-
-        if (filePathLen < mountPathLen) {
-            return false;
-        }
-        if (filePath.substring(0, mountPathLen).equals(mountPath))
-            flag = true;
-        return flag;
+    private static boolean judgeLegality(String filePath, String mountPath) {
+        Path child = Paths.get(filePath).toAbsolutePath();
+        Path father = Paths.get(mountPath).toAbsolutePath();
+        return child.startsWith(father);
     }
 
 
