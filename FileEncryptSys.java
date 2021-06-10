@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -24,7 +25,7 @@ public class FileEncryptSys {
     private static HashMap<FileEntity, byte[]> contentMap;
     private static byte[] defaultKey;
     private static byte[] currentUserKey;
-    private static String currentMountPath = "";
+    private static String currentMountPath;
 
     /**
      * initialize the global parameters with default key 2018154812345678
@@ -32,6 +33,7 @@ public class FileEncryptSys {
     private static void init() {
         contentMap = new HashMap<>();
         defaultKey = "2018154812345678".getBytes(StandardCharsets.UTF_8);
+        currentMountPath = "";
     }
 
     /**
@@ -142,7 +144,12 @@ public class FileEncryptSys {
         System.out.println("----------------------------------------------");
         System.out.println("Welcome to Century's Encrypting file system!");
         System.out.println("Please enter your choice to proceed: \n 1.write\n 2.read\n 3.remount\n 4.quit");
-        int num = sc.nextInt();
+        int num = 4;
+        try {
+            num = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Input illegal!");
+        }
         switch (num) {
             case 1:
                 write();
@@ -254,7 +261,7 @@ public class FileEncryptSys {
             currentUserKey = null;
         } else {
             String content = FileSysUtils.readFileContent(path);
-            System.out.println("The read file does not belong to the mount path, the contents are : " + content);
+            System.out.println("The read file does not belong to the mount path, the contents are : \n" + content);
         }
 
     }
